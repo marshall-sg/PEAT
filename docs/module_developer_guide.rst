@@ -46,7 +46,7 @@ The API also supports the runtime import of additional external "3rd-party" devi
 .. _writing-device-class:
 
 Example of writing a PEAT module
-=================================
+================================
 A module is a Python file containing a Python class that implements the desired PEAT interfaces, such as the data model and parsing. The steps are:
 
 - Create the module boilerplate code (including creating a subclass of :class:`~peat.device.DeviceModule`)
