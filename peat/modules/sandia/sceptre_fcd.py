@@ -81,11 +81,10 @@ class SCEPTRE(DeviceModule):
     vendor_name = "Sandia National Laboratories"
     model = "SCEPTRE"
     brand = "SCEPTRE"
-    filename_patterns = ["*.xml", "config.xml"]
     file_signatures = [
         FileSignature(
-            "config.xml",
-            xml_tags=["SCEPTRE"],
+            default_filename="config.xml",
+            xml_tags=("SCEPTRE",),
         ),
     ]
     default_options = {

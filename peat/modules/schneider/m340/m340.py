@@ -88,7 +88,7 @@ class M340(DeviceModule):
     filename_patterns = ["*.apx"]
     file_signatures = [
         FileSignature(
-            "project.apx",
+            default_filename="project.apx",
             magic_number="415058",  # APX
         ),
     ]

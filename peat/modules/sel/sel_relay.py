@@ -193,12 +193,12 @@ class SELRelay(DeviceModule):
     ]
     file_signatures = [
         FileSignature(
-            "sel_relay.rdb",
+            default_filename="sel_relay.rdb",
             magic_number=olefile.MAGIC.hex(),  # "d0cf11e0a1b11ae1"
         ),
         FileSignature(
-            "cfg.txt",
-            substrings=["[INFO]", "FID"],
+            default_filename="cfg.txt",
+            substrings=("[INFO]", "FID",),
         ),
     ]
 

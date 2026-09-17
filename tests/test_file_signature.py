@@ -24,7 +24,7 @@ class TestMagicNumberSignatures:
     def test_magic_number_valid_signature(self):
         """Test that a signature with a valid magic number is valid."""
         sig = FileSignature(default_filename="test.file", magic_number="12345678")
-        assert sig._valid is True
+        assert sig is not None
         assert sig._magic_number == (0x12, 0x34, 0x56, 0x78)
 
     magic_number_params_validity = [
@@ -49,13 +49,13 @@ class TestMagicNumberSignatures:
     )
     def test_magic_number_validity(self, pattern, expected):
         """Test various valid and invalid magic numbers, via typical usage."""
-        sig = FileSignature(default_filename="test.file", magic_number=pattern)
         if expected:
-            assert sig._valid is True
+            sig = FileSignature(default_filename="test.file", magic_number=pattern)
+            assert sig is not None
             assert sig._magic_number == expected
         else:
-            assert sig._valid is False
-            assert sig._magic_number is None
+            with pytest.raises(ValueError):
+                FileSignature(default_filename="test.file", magic_number=pattern)
 
     @pytest.mark.parametrize(
         ("pattern", "expected"),
@@ -107,24 +107,30 @@ class TestXMLTagSignatures:
 
     def test_xml_tags_valid_signature(self):
         """Test that a signature with XML tags is valid."""
-        sig = FileSignature(default_filename="test.file", xml_tags=["root", "data"])
-        assert sig._valid is True
+        sig = FileSignature(default_filename="test.file", xml_tags=("root", "data"))
+        assert sig is not None
 
     @pytest.mark.parametrize(
         ("tags", "expected"),
         [
             # Valid
-            pytest.param(["root"], True, id="Populated list"),
-            # Invalid -- minimal Falsy lists as "_is_empty" logic tested elsewhere
+            pytest.param(("root",), True, id="Singular tag"),
+            pytest.param(("root", "other"), True, id="Multiple tags"),
+            # Invalid -- minimal Falsy tuples as "_is_empty" logic tested elsewhere
             pytest.param(None, False, id="None"),
-            pytest.param([], False, id="Empty list"),
-            pytest.param([""], False, id="Empty string list"),
+            pytest.param((), False, id="Empty tuple"),
+            pytest.param((""), False, id="Empty string tuple"),
+            pytest.param(("root"), False, id="Singular tag as string"),
         ],
     )
     def test_xml_tags_validity(self, tags, expected):
         """Test various valid and invalid XML tags."""
-        sig = FileSignature(default_filename="test.file", xml_tags=tags)
-        assert sig._valid is expected
+        if expected:
+            sig = FileSignature(default_filename="test.file", xml_tags=tags)
+            assert sig is not None
+        else:
+            with pytest.raises(ValueError):
+                FileSignature(default_filename="test.file", xml_tags=tags)
 
     @pytest.mark.parametrize(
         ("data", "expected"),
@@ -141,7 +147,7 @@ class TestXMLTagSignatures:
     )
     def test_xml_tags_matching(self, data, expected):
         """Test XML tags match logic."""
-        tags = ["root", "data"]
+        tags = ("root", "data")
         sig = FileSignature(default_filename="test.file", xml_tags=tags)
         source = io.BytesIO(data)
         assert sig.matches(source) is expected
@@ -150,9 +156,8 @@ class TestXMLTagSignatures:
 
     def test_xml_tags_matches_none(self):
         """Test XML tags match logic with None, via internal _matches_xml_tags."""
-        sig = FileSignature(default_filename="test.file")
-        source = io.BytesIO(b"data")
-        assert sig._matches_xml_tags(source, None) is None
+        with pytest.raises(ValueError):
+            FileSignature(default_filename="test.file")
 
 
 class TestSubtringSignatures:
@@ -160,30 +165,36 @@ class TestSubtringSignatures:
 
     def test_substrings_valid_signature(self):
         """Test that a signature with substrings is valid."""
-        sig = FileSignature(default_filename="test.file", substrings=["hello", "world"])
-        assert sig._valid is True
+        sig = FileSignature(default_filename="test.file", substrings=("hello", "world"))
+        assert sig is not None
 
     @pytest.mark.parametrize(
         ("substrings", "expected"),
         [
             # Valid
-            pytest.param(["string"], True, id="Populated list"),
-            # Invalid -- minimal Falsy lists as "_is_empty" logic tested elsewhere
+            pytest.param(("string",), True, id="Singular substring"),
+            pytest.param(("string", "strings"), True, id="Multiple strings"),
+            # Invalid -- minimal Falsy tuples as "_is_empty" logic tested elsewhere
             pytest.param(None, False, id="None"),
-            pytest.param([], False, id="Empty list"),
-            pytest.param([""], False, id="Empty string list"),
+            pytest.param((), False, id="Empty tuple"),
+            pytest.param((""), False, id="Empty string tuple"),
+            pytest.param(("string"), False, id="Singular substring as string"),
         ],
     )
     def test_substrings_validity(self, substrings, expected):
         """Test various valid and invalid substrings."""
-        sig = FileSignature(default_filename="test.file", substrings=substrings)
-        assert sig._valid is expected
+        if expected:
+            sig = FileSignature(default_filename="test.file", substrings=substrings)
+            assert sig is not None
+        else:
+            with pytest.raises(ValueError):
+                FileSignature(default_filename="test.file", substrings=substrings)
 
     @pytest.mark.parametrize(
         ("data", "expected"),
         [
             pytest.param(b"string\nbytes\n", True, id="Multiple line"),
-            pytest.param(b"string bytes", True, id="Single line"),
+            pytest.param(b"string bytes", True, id="Singular line"),
             pytest.param(b"string bytestring", True, id="Substring match"),
             pytest.param(b"string\nstring\n", False, id="Missing"),
             pytest.param(b"bytes\nstring\n", False, id="Wrong order multiple line"),
@@ -192,7 +203,7 @@ class TestSubtringSignatures:
     )
     def test_substrings_matching(self, data, expected):
         """Test substrings match logic."""
-        substrings = ["string", b"bytes"]  # str | bytes
+        substrings = ("string", b"bytes")  # str | bytes
         sig = FileSignature(default_filename="test.file", substrings=substrings)
         source = io.BytesIO(data)
         assert sig.matches(source) is expected
@@ -201,9 +212,8 @@ class TestSubtringSignatures:
 
     def test_substrings_matches_none(self):
         """Test substrings match logic with None, via internal _matches_substrings."""
-        sig = FileSignature(default_filename="test.file")
-        source = io.BytesIO(b"data")
-        assert sig._matches_substrings(source, None) is None
+        with pytest.raises(ValueError):
+            FileSignature(default_filename="test.file")
 
 
 class TestCustomCheckSignatures:
@@ -216,7 +226,7 @@ class TestCustomCheckSignatures:
             return True
 
         sig = FileSignature(default_filename="test.file", custom_check=custom_check)
-        assert sig._valid is True
+        assert sig is not None
 
     def test_custom_check_valid_signature_with_lambda(self):
         """Test that a signature with a lambda function is valid."""
@@ -224,7 +234,7 @@ class TestCustomCheckSignatures:
             default_filename="test.file",
             custom_check=lambda _source: True,
         )
-        assert sig._valid is True
+        assert sig is not None
 
     # NOTE: Validity checks either covered by matching checks or fall under (API) user's purview
 
@@ -247,13 +257,14 @@ class TestCustomCheckSignatures:
     )
     def test_custom_check_matching(self, check, expected):
         """Test custom check matching logic."""
-        sig = FileSignature(default_filename="test.file", custom_check=check)
-        source = io.BytesIO(b"test content")
-        assert sig.matches(source) == expected
-        # Directly check the internal function as well
         if check is None:
-            assert sig._matches_custom_check(source, check) is None
+            with pytest.raises(ValueError):
+                FileSignature(default_filename="test.file", custom_check=check)
         else:
+            sig = FileSignature(default_filename="test.file", custom_check=check)
+            source = io.BytesIO(b"test content")
+            assert sig.matches(source) == expected
+            # Directly check the internal function as well
             assert sig._matches_custom_check(source, check) == expected
 
     def test_custom_check_passes_source(self):
@@ -287,8 +298,8 @@ class TestMultipleSignatureTypes:
         sig = FileSignature(
             default_filename="test.file",
             magic_number=magic,
-            xml_tags=["root"],
-            substrings=["<root>"],  # re-check xml tag as string to ensure position reset
+            xml_tags=("root",),
+            substrings=("<root>",),  # re-check xml tag as string to ensure position reset
         )
         source = io.BytesIO(b'<?xml version="1.0"?><root>content</root>')
         assert sig.matches(source) is expected
@@ -299,10 +310,8 @@ class TestGeneralObjectFeatures:
 
     def test_invalid_signature_no_check_no_match(self):
         """Test that a signature with no checks is invalid and doesn't match."""
-        sig = FileSignature(default_filename="test.file")
-        assert sig._valid is False
-        source = io.BytesIO(b"\x12\x34\x56\x78")
-        assert sig.matches(source) is False
+        with pytest.raises(ValueError):
+            FileSignature(default_filename="test.file")
 
     def test_nonexistent_file_no_match(self):
         """Test that nonexistent file returns False."""
@@ -331,7 +340,7 @@ class TestGeneralObjectFeatures:
 
         sig = FileSignature(
             default_filename="test.file",
-            substrings=["hello", "world"],
+            substrings=("hello", "world"),
         )
 
         if not source or source == 1234:
@@ -347,17 +356,6 @@ class TestIsEmptyMethod:
         ("data", "expected"),
         [
             pytest.param(None, True, id="None"),
-            # list[str]
-            pytest.param([], True, id="list-nothing"),
-            pytest.param([None], True, id="list-None"),
-            pytest.param([""], True, id="list-one empty"),
-            pytest.param([None, ""], True, id="list-None and empty"),
-            pytest.param(["1"], False, id="list-one str"),
-            pytest.param(["1", "2"], False, id="list-multiple str"),
-            pytest.param(["1", None], False, id="list-one str, None last"),
-            pytest.param([None, "1"], False, id="list-one str, None first"),
-            pytest.param(["1", ""], False, id="list-one str, empty last"),
-            pytest.param(["", "1"], False, id="list-one str, empty first"),
             # tuple[int | None, ...]
             pytest.param((), True, id="tuple-nothing"),
             # ((None), True), # Is equivalent to prior `(None, True)`
@@ -370,7 +368,7 @@ class TestIsEmptyMethod:
         ],
     )
     def test_is_empty(self, data, expected):
-        """Test if a list or tuple is considered empty."""
+        """Test if a tuple is considered empty."""
         assert FileSignature._is_empty(data) is expected
 
 

@@ -43,9 +43,9 @@ class L5X(DeviceModule):
     filename_patterns = ["*.l5x", "*.L5X"]
     file_signatures = [
         FileSignature(
-            "l5x.xml",
+            default_filename="l5x.xml",
             magic_number="3C3F786D6C20",
-            xml_tags=["RSLogix5000Content"],
+            xml_tags=("RSLogix5000Content",),
         ),
     ]
     module_aliases = ["Logic_L5X", "L5X_logic", "l5x_logic", "Rockwell_l5x"]

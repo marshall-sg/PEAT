@@ -39,7 +39,6 @@ class Fortigate(DeviceModule):
     vendor_id = "Fortinet"
     vendor_name = "Fortinet, Inc."
     brand = "FortiGate"
-    # TODO: file fingerprinting by reading contents of text file
     filename_patterns = [
         "*Fortigate*.conf",
         "*ortigate*.conf",
@@ -50,16 +49,16 @@ class Fortigate(DeviceModule):
     ]
     file_signatures = [
         FileSignature(
-            "fortigate.conf",
-            substrings=["config-version=", "config system global", "vdom"],
+            default_filename="fortigate.conf",
+            substrings=("config-version=", "config system global", "vdom",),
         ),
         FileSignature(
-            "debug.log",
-            substrings=["FortiGate", "Diagnose output"],
+            default_filename="debug.log",
+            substrings=("FortiGate", "Diagnose output",),
         ),
         FileSignature(
-            "event.log",
-            substrings=["date=", "time=", "eventtime=", "tz=", "logid=", "vd="],
+            default_filename="event.log",
+            substrings=("date=", "time=", "eventtime=", "tz=", "logid=", "vd=",),
         ),
     ]
     can_parse_dir: bool = True

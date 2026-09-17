@@ -91,11 +91,12 @@ class DeviceModule:
     Signatures to determine if file data is parsable by this module,
     and what type of file it is, e.g. config vs log vs firmware.
 
-    It uses a ``FileSignature`` object, which contains the expected or
-    targeted filename as well as the associated signatures that must ALL
-    match. The signatures can be magic bytes, XML tags, substrings, or
-    a custom function (named or lambda) which receives the ``BinaryIO``
-    to check and returns a True (matches) or False (does not match).
+    It uses a :class:`~peat.file_signature.FileSignature` object, which contains
+    the expected or targeted filename as well as the associated signatures that
+    must ALL match. The signatures can be magic bytes, XML tags, substrings, or
+    a custom function (named or lambda) which receives the
+    :class:`~typing.BinaryIO` to check and returns a True (matches) or False
+    (does not match).
     """
 
     can_parse_dir: bool = False
@@ -319,7 +320,7 @@ class DeviceModule:
 
             # Attempt to use signatures to label if no prior pattern matches
             # - Defaults to prior behavior if no signature match
-            if label == "raw-unparsed-data" and not ext:
+            if label == "raw-unparsed-data" and not ext and cls.file_signatures:
                 cls.log.debug("Signature checking data")
                 for signature in cls.file_signatures:
                     if signature.matches(to_parse):
