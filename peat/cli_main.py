@@ -80,6 +80,16 @@ def run_peat(args: dict[str, Any], start_time: float) -> None:
 
     # Print examples for the current sub-command, e.g. "scan"
     if args.get("examples"):
+        func = args["func"]
+        if not func or func not in cli_args.ALL_EXAMPLES:
+            available = ", ".join(sorted(cli_args.ALL_EXAMPLES))
+            print(  # noqa: T201
+                f"No examples found for function: {func!r}\n"
+                f"Available functions with examples: {available}",
+                flush=True,
+            )
+            sys.exit(1)
+
         print(cli_args.ALL_EXAMPLES[args["func"]].strip(), flush=True)  # noqa: T201
         sys.exit(0)
 

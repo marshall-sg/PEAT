@@ -408,6 +408,33 @@ peat heat -e --heat-date-range "2021-07-15T00:00:00.000 - 2021-07-16T12:34:12.14
 peat heat -e -c peat-config.yaml
 """  # End HEAT examples
 
+encrypt_results_examples = """
+# See the "Encrypting results" section in the PEAT documentation
+
+# Encrypt the files in the -f directory with the user password and store the results in the -w directory
+peat encrypt-results -f '~/peat/results' -p secret -w '~/peat/encrypted_results'
+"""  # End encrypt-results examples
+
+decrypt_results_examples = """
+# See the "Decrypting results" section in the PEAT documentation
+
+# Decrypt the files in the -f directory with the user password and store the results in the -w directory
+peat encrypt-results -f '~/peat/encrypted_results' -p secret -w '~/peat/results'
+"""  # End decrypt-results examples
+
+encrypt_config_examples = """
+# See the "peat encrypt-config" section in the PEAT documentation
+
+# Encrypt the config files in the -f directory with the user password and store the encrypted result in the -w directory
+peat encrypt-config -f '<my_path>/example_config.yaml' -p secret -w '<my_path>/encrypted_config.yaml'
+"""  # End encrypt-config examples
+
+decrypt_config_examples = """
+# See the "peat decrypt-config" section in the PEAT documentation
+
+# Decrypt the config files in the -f directory with the user password and store the result in the -w directory
+peat decrypt-config -f '<my_path>/encrypted_config.yaml' -p secret -w '<my_path>/example_config.yaml'
+"""  # End decrypt-config examples
 
 ALL_EXAMPLES: dict[str, str] = {
     "scan": scan_examples,
@@ -416,6 +443,10 @@ ALL_EXAMPLES: dict[str, str] = {
     "push": push_examples,
     "pillage": pillage_examples,
     "heat": heat_examples,
+    "encrypt_results": encrypt_results_examples,
+    "decrypt_results": decrypt_results_examples,
+    "encrypt_config": encrypt_config_examples,
+    "decrypt_config": decrypt_config_examples,
 }
 
 
