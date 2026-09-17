@@ -50,15 +50,29 @@ class Fortigate(DeviceModule):
     file_signatures = [
         FileSignature(
             default_filename="fortigate.conf",
-            substrings=("config-version=", "config system global", "vdom",),
+            substrings=(
+                "config-version=",
+                "config system global",
+                "vdom",
+            ),
         ),
         FileSignature(
             default_filename="debug.log",
-            substrings=("FortiGate", "Diagnose output",),
+            substrings=(
+                "FortiGate",
+                "Diagnose output",
+            ),
         ),
         FileSignature(
             default_filename="event.log",
-            substrings=("date=", "time=", "eventtime=", "tz=", "logid=", "vd=",),
+            substrings=(
+                "date=",
+                "time=",
+                "eventtime=",
+                "tz=",
+                "logid=",
+                "vd=",
+            ),
         ),
     ]
     can_parse_dir: bool = True

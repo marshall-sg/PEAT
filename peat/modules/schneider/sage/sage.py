@@ -104,7 +104,10 @@ class Sage(DeviceModule):
         ),
         FileSignature(
             default_filename="timing.xml",
-            xml_tags=("ROOT", "TIMERS",),
+            xml_tags=(
+                "ROOT",
+                "TIMERS",
+            ),
         ),
         FileSignature(
             default_filename="calc.xml",
@@ -112,7 +115,10 @@ class Sage(DeviceModule):
         ),
         FileSignature(
             default_filename="rtu_sts.xml",
-            xml_tags=("ROOT", "RTU_STS",),
+            xml_tags=(
+                "ROOT",
+                "RTU_STS",
+            ),
         ),
         FileSignature(
             default_filename="sfb.xml",
@@ -124,15 +130,26 @@ class Sage(DeviceModule):
         ),
         FileSignature(
             default_filename="alarms.xml",
-            xml_tags=("ROOT", "ALARMS", "DI",),
+            xml_tags=(
+                "ROOT",
+                "ALARMS",
+                "DI",
+            ),
         ),
         FileSignature(
             default_filename="alarming.xml",
-            xml_tags=("ROOT", "ALARMS", "AI_MAP",),
+            xml_tags=(
+                "ROOT",
+                "ALARMS",
+                "AI_MAP",
+            ),
         ),
         FileSignature(
             default_filename="almdev.xml",
-            xml_tags=("ROOT", "DEVICE_ATTRIBUTES",),
+            xml_tags=(
+                "ROOT",
+                "DEVICE_ATTRIBUTES",
+            ),
         ),
         FileSignature(
             default_filename="bbdi.xml",
@@ -140,60 +157,105 @@ class Sage(DeviceModule):
         ),
         FileSignature(
             default_filename="cbcconf.xml",
-            xml_tags=("CBC", "CBC_PARAM",),
+            xml_tags=(
+                "CBC",
+                "CBC_PARAM",
+            ),
         ),
         FileSignature(
             default_filename="astconf.xml",
-            xml_tags=("AST", "AST_DB",),
+            xml_tags=(
+                "AST",
+                "AST_DB",
+            ),
         ),
         FileSignature(
             default_filename="anunctor.xml",
-            xml_tags=("ANNUNCIATOR", "CELLS",),
+            xml_tags=(
+                "ANNUNCIATOR",
+                "CELLS",
+            ),
         ),
         FileSignature(
             default_filename="cmdlog.xml",
-            xml_tags=("CMDLOG", "CMDLOG_PARAM",),
+            xml_tags=(
+                "CMDLOG",
+                "CMDLOG_PARAM",
+            ),
         ),
         FileSignature(
             default_filename="comasign.xml",
-            xml_tags=("COM_ASSIGN", "PORT",),
+            xml_tags=(
+                "COM_ASSIGN",
+                "PORT",
+            ),
         ),
         FileSignature(
             default_filename="sprcodes.xml",
-            xml_tags=("ROOT", "CODE",),
+            xml_tags=(
+                "ROOT",
+                "CODE",
+            ),
             substrings=("PNT=",),
         ),
         FileSignature(
             default_filename="soelog.xml",
-            xml_tags=("SOELOG", "SOELOG_PARAM",),
+            xml_tags=(
+                "SOELOG",
+                "SOELOG_PARAM",
+            ),
         ),
         FileSignature(
             default_filename="leds.xml",
-            xml_tags=("ROOT", "LEDS", "LED",),
+            xml_tags=(
+                "ROOT",
+                "LEDS",
+                "LED",
+            ),
         ),
         FileSignature(
             default_filename="relays.xml",
-            xml_tags=("ROOT", "RELAYS", "RLY",),
+            xml_tags=(
+                "ROOT",
+                "RELAYS",
+                "RLY",
+            ),
         ),
         FileSignature(
             default_filename="nrgcalc.xml",
-            xml_tags=("NRGCALC", "NRGCALC_PARAM",),
+            xml_tags=(
+                "NRGCALC",
+                "NRGCALC_PARAM",
+            ),
         ),
         FileSignature(
             default_filename="bbrelay.xml",
-            xml_tags=("RELAYS", "BB",),
+            xml_tags=(
+                "RELAYS",
+                "BB",
+            ),
         ),
         FileSignature(
             default_filename="btstconf.xml",
-            xml_tags=("BTEST", "BTEST_RECORD",),
+            xml_tags=(
+                "BTEST",
+                "BTEST_RECORD",
+            ),
         ),
         FileSignature(
             default_filename="aci.xml",
-            xml_tags=("ACI_DB", "FMR",),
+            xml_tags=(
+                "ACI_DB",
+                "FMR",
+            ),
         ),
         FileSignature(
             default_filename="aci1250.xml",
-            xml_tags=("ACI_DB", "FMR", "NOMINAL",),
+            xml_tags=(
+                "ACI_DB",
+                "FMR",
+                "NOMINAL",
+            ),
         ),
     ]
     can_parse_dir = True

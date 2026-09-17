@@ -17,13 +17,17 @@ from pydantic import (
 
 try:
     from pydantic import model_validator
+
     PYDANTIC_V2 = True
 except ImportError:
     PYDANTIC_V2 = False
+
     def model_validator(*args: Any, **kwargs: Any):  # noqa: ARG001
         def decorator(func: Callable) -> Callable:
             return func
+
         return decorator
+
 
 from peat import log
 
@@ -37,6 +41,7 @@ else:
     FileCheck = Callable[[BinaryIO], StrictBool]
     SourceInput = StrictStr | os.PathLike | StrictBytes | bytearray | memoryview | BinaryIO | None
 MagicTuple = tuple[OptionalBytes, ...]
+
 
 @contextmanager
 def _as_byte_stream(source: SourceInput) -> Iterator[BinaryIO]:
@@ -68,47 +73,49 @@ def _as_byte_stream(source: SourceInput) -> Iterator[BinaryIO]:
 
     raise TypeError(f"Unsupported input type: {type(source)}")
 
-SCHEMA_EXTRA={
-        "anyOf": [
-            {
-                "required": ["magic_number"],
-                "properties": {
-                    "magic_number": {
-                        "type": "string",
-                        "minLength": 1,
-                    }
-                },
+
+SCHEMA_EXTRA = {
+    "anyOf": [
+        {
+            "required": ["magic_number"],
+            "properties": {
+                "magic_number": {
+                    "type": "string",
+                    "minLength": 1,
+                }
             },
-            {
-                "required": ["xml_tags"],
-                "properties": {
-                    "xml_tags": {
-                        "type": "array",
-                        "minItems": 1,
-                    }
-                },
+        },
+        {
+            "required": ["xml_tags"],
+            "properties": {
+                "xml_tags": {
+                    "type": "array",
+                    "minItems": 1,
+                }
             },
-            {
-                "required": ["substrings"],
-                "properties": {
-                    "substrings": {
-                        "type": "array",
-                        "minItems": 1,
-                    }
-                },
+        },
+        {
+            "required": ["substrings"],
+            "properties": {
+                "substrings": {
+                    "type": "array",
+                    "minItems": 1,
+                }
             },
-            {
-                "required": ["custom_check"],
-                "properties": {
-                    "custom_check": {
-                        "not": {
-                            "type": "null",
-                        }
+        },
+        {
+            "required": ["custom_check"],
+            "properties": {
+                "custom_check": {
+                    "not": {
+                        "type": "null",
                     }
-                },
+                }
             },
-        ]
-    }
+        },
+    ]
+}
+
 
 class FileSignature(BaseModel):
     """
@@ -139,9 +146,10 @@ class FileSignature(BaseModel):
             strict=True,
             extra="forbid",
             arbitrary_types_allowed=True,
-            json_schema_extra=SCHEMA_EXTRA
+            json_schema_extra=SCHEMA_EXTRA,
         )
     else:
+
         class Config:
             frozen = True
             extra = "forbid"
@@ -200,6 +208,7 @@ class FileSignature(BaseModel):
     _magic_number: MagicTuple | None = PrivateAttr(default=None)
 
     if not PYDANTIC_V2:
+
         def __init__(self, **data: Any):
             super().__init__(**data)
             self.require_at_least_one_checker()

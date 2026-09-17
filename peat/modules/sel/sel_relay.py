@@ -198,7 +198,10 @@ class SELRelay(DeviceModule):
         ),
         FileSignature(
             default_filename="cfg.txt",
-            substrings=("[INFO]", "FID",),
+            substrings=(
+                "[INFO]",
+                "FID",
+            ),
         ),
     ]
 
