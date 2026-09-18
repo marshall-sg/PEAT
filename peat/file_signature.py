@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from io import BytesIO
-from typing import Any, BinaryIO, Self
+from typing import Any, BinaryIO, Final, Self
 
 from pydantic import (
     BaseModel,
@@ -74,7 +74,7 @@ def _as_byte_stream(source: SourceInput) -> Iterator[BinaryIO]:
     raise TypeError(f"Unsupported input type: {type(source)}")
 
 
-SCHEMA_EXTRA = {
+SCHEMA_EXTRA: Final = {
     "anyOf": [
         {
             "required": ["magic_number"],
@@ -356,7 +356,7 @@ class FileSignature(BaseModel):
 
         Returns:
             - :data:`None` if check skipped
-            - :data:`True` IFF all tests pass
+            - :data:`True` if and only if all tests pass
             - :data:`False` if any test fails or not tried
         """
         log.trace(f"Magic bytes check: {magic_bytes}")
@@ -381,7 +381,7 @@ class FileSignature(BaseModel):
 
         Returns:
             - :data:`None` if check skipped
-            - :data:`True` IFF all tests pass
+            - :data:`True` if and only if all tests pass
             - :data:`False` if any test fails or not tried
         """
         log.trace(f"XML tags check: {tags}")
@@ -418,7 +418,7 @@ class FileSignature(BaseModel):
 
         Returns:
             - :data:`None` if check skipped
-            - :data:`True` IFF all tests pass
+            - :data:`True` if and only if all tests pass
             - :data:`False` if any test fails or not tried
         """
         log.trace(f"Strings check: {substrings}")
@@ -455,7 +455,7 @@ class FileSignature(BaseModel):
 
         Returns:
             - :data:`None` if `custom_check` is :data:`None`
-            - :data:`True` IFF `custom_check` returns :data:`True`
+            - :data:`True` if and only if `custom_check` returns :data:`True`
             - :data:`False` if `custom_check` returns :data:`False` or otherwise fails
         """
         log.trace(f"Custom check: {custom_check}")
@@ -464,7 +464,7 @@ class FileSignature(BaseModel):
         try:
             return custom_check(data) is True
         except Exception as ex:
-            log.warn(f"Custom check threw exception: {ex}")
+            log.warning(f"Custom check threw exception: {ex}")
             return False
 
 

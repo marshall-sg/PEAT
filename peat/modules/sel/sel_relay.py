@@ -203,6 +203,12 @@ class SELRelay(DeviceModule):
                 "FID",
             ),
         ),
+        # greedy in it will match targeted zlib compressed data
+        # downstream logic must handle possibly incorrect data
+        FileSignature(
+            default_filename="SET_61850.CID",
+            magic_number="7801",  # zlib---no compression, no preset dictionary
+        ),
     ]
 
     # These are what's known to work. Others may work as well

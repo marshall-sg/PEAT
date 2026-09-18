@@ -243,18 +243,18 @@ class Sage(DeviceModule):
             ),
         ),
         FileSignature(
-            default_filename="aci.xml",
-            xml_tags=(
-                "ACI_DB",
-                "FMR",
-            ),
-        ),
-        FileSignature(
             default_filename="aci1250.xml",
             xml_tags=(
                 "ACI_DB",
                 "FMR",
                 "NOMINAL",
+            ),
+        ),
+        FileSignature(
+            default_filename="aci.xml",
+            xml_tags=(
+                "ACI_DB",
+                "FMR",
             ),
         ),
     ]
