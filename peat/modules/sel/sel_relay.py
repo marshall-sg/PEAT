@@ -198,11 +198,11 @@ class SELRelay(DeviceModule):
         Take zlib compressed data and test if contains expected CID data
         """
         import zlib
-        decompressed_bytes = zlib.decompress(data)
+        decompressed_bytes = zlib.decompress(data.getvalue())
         sig = FileSignature(
             default_filename="",
-            xml_tags=("SCL", "Header"),
-            substrings=("IEC 61850"),
+            xml_tags=("{http://www.iec.ch/61850/2003/SCL}SCL",),
+            substrings=("IEC 61850",),
         )
         return sig.matches(decompressed_bytes)
 
