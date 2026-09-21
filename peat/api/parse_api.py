@@ -258,8 +258,8 @@ def find_parsable_files(files: list[str], dev_cls: type[DeviceModule]) -> list[P
 
     def is_parsable(filename: str) -> None | str:
         # Favor fast matching first to limit overall delay and resource consumption
-        if (parsable_file_by_pattern(filename, dev_cls) or
-            parsable_file_by_signature(filename, dev_cls)
+        if parsable_file_by_pattern(filename, dev_cls) or parsable_file_by_signature(
+            filename, dev_cls
         ):
             return filename
         return None

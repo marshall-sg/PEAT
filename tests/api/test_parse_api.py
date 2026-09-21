@@ -1,5 +1,3 @@
-import pytest
-
 from peat import __version__, config, datastore
 from peat.api.parse_api import parse
 
