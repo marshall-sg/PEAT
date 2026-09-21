@@ -191,6 +191,21 @@ class SELRelay(DeviceModule):
         "*.CID",
         "*.cid",
     ]
+
+    # Targeted function for file_signatures custom_check usage
+    def is_cid(data):
+        """
+        Take zlib compressed data and test if contains expected CID data
+        """
+        import zlib
+        decompressed_bytes = zlib.decompress(data)
+        sig = FileSignature(
+            default_filename="",
+            xml_tags=("SCL", "Header"),
+            substrings=("IEC 61850"),
+        )
+        return sig.matches(decompressed_bytes)
+
     file_signatures = [
         FileSignature(
             default_filename="sel_relay.rdb",
@@ -203,11 +218,10 @@ class SELRelay(DeviceModule):
                 "FID",
             ),
         ),
-        # greedy in it will match targeted zlib compressed data
-        # downstream logic must handle possibly incorrect data
         FileSignature(
             default_filename="SET_61850.CID",
             magic_number="7801",  # zlib---no compression, no preset dictionary
+            custom_check=is_cid,  # examine decompressed content
         ),
     ]
 
