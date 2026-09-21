@@ -199,13 +199,16 @@ class SELRelay(DeviceModule):
         """
         import zlib
 
-        decompressed_bytes = zlib.decompress(data.getvalue())
-        sig = FileSignature(
-            default_filename="",
-            xml_tags=("{http://www.iec.ch/61850/2003/SCL}SCL",),
-            substrings=("IEC 61850",),
-        )
-        return sig.matches(decompressed_bytes)
+        try:
+            decompressed_bytes = zlib.decompress(data.read())
+            sig = FileSignature(
+                default_filename="",
+                xml_tags=("{http://www.iec.ch/61850/2003/SCL}SCL",),
+                substrings=("IEC 61850",),
+            )
+            return sig.matches(decompressed_bytes)
+        except zlib.error:
+            return False
 
     file_signatures = [
         FileSignature(
