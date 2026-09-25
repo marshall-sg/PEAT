@@ -359,7 +359,7 @@ class FileSignature(BaseModel):
             - :data:`True` if and only if all tests pass
             - :data:`False` if any test fails or not tried
         """
-        log.trace(f"Magic bytes check: {magic_bytes}")
+        log.trace3(f"Magic bytes check: {magic_bytes}")
         if self._is_empty(magic_bytes):
             return None
         byte_size = len(magic_bytes)
@@ -384,7 +384,7 @@ class FileSignature(BaseModel):
             - :data:`True` if and only if all tests pass
             - :data:`False` if any test fails or not tried
         """
-        log.trace(f"XML tags check: {tags}")
+        log.trace3(f"XML tags check: {tags}")
         if self._is_empty(tags):
             return None
         if isinstance(tags, str):
@@ -421,7 +421,7 @@ class FileSignature(BaseModel):
             - :data:`True` if and only if all tests pass
             - :data:`False` if any test fails or not tried
         """
-        log.trace(f"Strings check: {substrings}")
+        log.trace3(f"Strings check: {substrings}")
         if self._is_empty(substrings):
             return None
         if isinstance(substrings, str):
@@ -458,7 +458,7 @@ class FileSignature(BaseModel):
             - :data:`True` if and only if `custom_check` returns :data:`True`
             - :data:`False` if `custom_check` returns :data:`False` or otherwise fails
         """
-        log.trace(f"Custom check: {custom_check}")
+        log.trace3(f"Custom check: {custom_check}")
         if custom_check is None:
             return None
         try:

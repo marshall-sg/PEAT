@@ -286,8 +286,9 @@ def parsable_file_by_pattern(filename: str, dev_cls: type[DeviceModule]) -> bool
         if pattern[0] != "*":
             pattern = f"*{pattern}"
 
-        log.trace3(f"Checking pattern '{pattern}' for {dev_cls.__name__}")
+        log.trace3(f"Checking {dev_cls.__name__}'s pattern '{pattern}' against {filename}")
         if fnmatchcase(filename.lower(), pattern.lower()):
+            log.debug(f"Pattern match ({pattern}) on {filename}")
             return True
     return False
 
@@ -295,8 +296,9 @@ def parsable_file_by_pattern(filename: str, dev_cls: type[DeviceModule]) -> bool
 def parsable_file_by_signature(filename: str, dev_cls: type[DeviceModule]) -> bool:
     """Determine if file matches device type file signatures."""
     for sig in dev_cls.file_signatures:
-        log.trace3(f"Checking signature '{sig}' for {dev_cls.__name__}")
+        log.trace3(f"Checking {dev_cls.__name__}'s signature '{sig}' against {filename}")
         if sig.matches(filename):
+            log.debug(f"Signature match ({sig}) on {filename}")
             return True
     return False
 
